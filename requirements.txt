@@ -1,0 +1,3 @@
+requests==2.24.0
+python-openhab==2.14.0
+webcolors==1.11.1
