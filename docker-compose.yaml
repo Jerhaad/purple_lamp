@@ -1,0 +1,16 @@
+version: "2.1"
+
+services:
+  purple_lamp:
+    image: purple:local
+    environment:
+      - PURPLE=192.168.42.47
+      - OPENHAB_IP=192.168.1.35
+      - OPENHAB_PORT=8080
+      - LAMP_THING_BASE=amazonechocontrol_smartHomeDevice_4fcf3790_1c497908_dad4_46b1_a64a_33d603ec5b1e
+      - TIME_INTERVAL=360
+    volumes:
+      - './purple/:/purple/'
+    network_mode: host
+    restart: unless-stopped
+
