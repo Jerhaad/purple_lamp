@@ -109,7 +109,7 @@ class OpenHABServer:
         :return lamp_is_on: <bool>
         """
 
-        log._debug("Checking Lamp Status")
+        log_.debug("Checking Lamp Status")
 
         lamp_is_on = self.power_state_item.state == "ON"
         return lamp_is_on
