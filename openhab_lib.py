@@ -13,6 +13,7 @@ from openhab import OpenHAB
 # Constants #
 SERVER_FORMAT = "http://{ip_addr}:{port}/rest".format
 COLOR_NAME_ATTR = "colorName"
+POWER_STATE_ATTR = "powerState"
 
 log_ = logging.getLogger(__name__)
 
@@ -32,6 +33,7 @@ class OpenHABServer:
         self._is_open = None
         self._light_base = _base_transform(light_base)
         self._light_color_name = self._light_base + COLOR_NAME_ATTR
+        self._light_power_state = self._light_base + POWER_STATE_ATTR
 
         self.color_name_item = None
         self.ip_addr = ip_addr
@@ -70,6 +72,7 @@ class OpenHABServer:
 
             self._openhab = OpenHAB(server_path)
             self.color_name_item = self._openhab.get_item(self._light_color_name)
+            self.power_state_item = self._openhab.get_item(self._light_power_state)
             self._is_open = True
 
     def close(self, exc_type=None, exc_value=None, traceback=None):
@@ -83,9 +86,10 @@ class OpenHABServer:
         else:
             log_.warning("Already Closed!")
 
-        log_.error(
-            "Passing exception data: %s, %s, %s.", exc_type, exc_value, traceback
-        )
+        if exc_type:
+            log_.error(
+                "Passing exception data: %s, %s, %s.", exc_type, exc_value, traceback
+            )
 
     def change_light_color(self, color):
         """
@@ -98,6 +102,17 @@ class OpenHABServer:
         log_.debug("   color: %s", color)
 
         self.color_name_item.command(color)
+
+    def get_lamp_status(self):
+        """
+        Check the lamp's current ON/OFF status
+        :return lamp_is_on: <bool>
+        """
+
+        log._debug("Checking Lamp Status")
+
+        lamp_is_on = self.power_state_item.state == "ON"
+        return lamp_is_on
 
 
 def _base_transform(raw):

@@ -107,8 +107,14 @@ def run():
         log.info("Getting Color Name")
         color = get_color_name(rgb)
 
-        log.info("Setting new Color: %s", color)
-        openhab.change_light_color(color)
+        log.info("Checking Lamp Status")
+        lamp_on = openhab.get_lamp_status()
+
+        if lamp_on:
+            log.info("Setting new Color: %s", color)
+            openhab.change_light_color(color)
+        else:
+            log.warning("Lamp is off, not changing color.")
 
         time.sleep(args.time_interval)
 
