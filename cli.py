@@ -51,6 +51,13 @@ def get_parser():
         default=DEFAULT_INTERVAL_S,
     )
 
+    arg_parser.add_argument(
+        "--once",
+        action="store_true",
+        help="Flag to run once instead of looping.",
+        default=False,
+    )
+
     return arg_parser
 
 
@@ -115,6 +122,9 @@ def run():
             openhab.change_light_color(color)
         else:
             log.warning("Lamp is off, not changing color.")
+
+        if args.once:
+            break
 
         time.sleep(args.time_interval)
 
